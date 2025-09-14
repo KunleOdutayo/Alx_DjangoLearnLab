@@ -1,18 +1,25 @@
 import os
-import django
+import sys
+from pathlib import Path
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings') 
+# Add the parent directory (the django-models project root) to the system path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+# Now you can import the Django project's settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
+import django
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
 
 def run_queries():
-
+    # Clean up existing data for a fresh start
     Author.objects.all().delete()
     Book.objects.all().delete()
     Library.objects.all().delete()
     Librarian.objects.all().delete()
 
+    # 1. Create sample data
     print("Creating sample data...")
     author1 = Author.objects.create(name="Jane Austen")
     author2 = Author.objects.create(name="George Orwell")
@@ -32,6 +39,7 @@ def run_queries():
     librarian2 = Librarian.objects.create(name="Bob", library=library2)
     print("Sample data created.\n")
 
+    # 2. Query all books by a specific author (ForeignKey relationship)
     print("--- Query 1: Books by Jane Austen ---")
     author_j_austen = Author.objects.get(name="Jane Austen")
     books_by_j_austen = author_j_austen.book_set.all()
@@ -39,14 +47,16 @@ def run_queries():
         print(f" - {book.title}")
     print("\n")
 
+    # 3. List all books in a library (ManyToMany relationship)
     print("--- Query 2: Books in Central Library ---")
-    central_library = Library.objects.get(name="Central Library")
+    library_name = "Central Library" 
+    central_library = Library.objects.get(name=library_name) 
     books_in_central_library = central_library.books.all()
     for book in books_in_central_library:
         print(f" - {book.title}")
     print("\n")
 
-    
+    # 4. Retrieve the librarian for a library (OneToOne relationship)
     print("--- Query 3: Librarian for City Archives ---")
     city_archives = Library.objects.get(name="City Archives")
     librarian_for_city_archives = city_archives.librarian
