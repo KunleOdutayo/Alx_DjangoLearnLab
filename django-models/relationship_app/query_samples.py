@@ -41,7 +41,7 @@ def run_queries():
 
     # 2. Query all books by a specific author (ForeignKey relationship)
     print("--- Query 1: Books by Jane Austen ---")
-    author_j_austen = Author.objects.get(name="Jane Austen")
+    author_j_austen = Author.objects.get(name=author_name), objects.filter(author=author)
     books_by_j_austen = author_j_austen.book_set.all()
     for book in books_by_j_austen:
         print(f" - {book.title}")
