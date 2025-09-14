@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings') 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings') 
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
