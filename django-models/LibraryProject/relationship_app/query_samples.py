@@ -48,7 +48,7 @@ def run_queries():
 
     
     print("--- Query 3: Librarian for City Archives ---")
-    city_archives = Library.objects.get(library="City Archives")
+    city_archives = Librarian.objects.get(library="City Archives")
     librarian_for_city_archives = city_archives.librarian
     print(f" - The librarian for {city_archives.name} is {librarian_for_city_archives.name}.")
     print("\n")
