@@ -40,7 +40,7 @@ def run_queries():
     print("\n")
 
     print("--- Query 2: Books in Central Library ---")
-    central_library = Library.objects.get(name="Central Library")
+    library_name = Library.objects.get(name=library_name)
     books_in_central_library = central_library.books.all()
     for book in books_in_central_library:
         print(f" - {book.title}")
