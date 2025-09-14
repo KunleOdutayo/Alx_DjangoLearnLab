@@ -13,5 +13,5 @@ from .models import Book, Library
 
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'relationship_app/library_detail.html'
+    template_name = 'relationship_app/library_detail.html from .models import Library'
     context_object_name = 'library'
