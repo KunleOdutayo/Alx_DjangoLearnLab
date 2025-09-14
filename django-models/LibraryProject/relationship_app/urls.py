@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import book_list, LibraryDetailView
+from .views import book_list as list_books, LibraryDetailView
 
 urlpatterns = [
     path('books/', book_list, name='book_list'),
