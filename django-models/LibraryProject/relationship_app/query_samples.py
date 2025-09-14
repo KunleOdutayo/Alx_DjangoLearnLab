@@ -58,7 +58,7 @@ def run_queries():
 
     # 4. Retrieve the librarian for a library (OneToOne relationship)
     print("--- Query 3: Librarian for City Archives ---")
-    city_archives = Library.objects.get(name="City Archives")
+    city_archives = Librarian.objects.get(library= "City Archives")
     librarian_for_city_archives = city_archives.librarian
     print(f" - The librarian for {city_archives.name} is {librarian_for_city_archives.name}.")
     print("\n")
