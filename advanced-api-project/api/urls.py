@@ -4,6 +4,8 @@ from .views import BookListView, BookDetailView, BookCreateView, BookUpdateView,
 BookListCreateAPIView, BookRetrieveUpdateDstroyAPIView
 
 urlpatterns = [
+    path('', include(router.urls)),
+    
     path('books/',
         BookListCreateAPIView.as_view(),
         name='book-list-create'),
