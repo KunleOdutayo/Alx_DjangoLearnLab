@@ -4,13 +4,19 @@ from rest_framework.generics import GenericAPIView
 from .models import Book
 from .serializers import BookSerializer
 
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all().order_by('name')
+    serializer_class = AuthorSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class BookListCreateAPIView(generics.ListCreateAPIView):
-
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class BookDetailAPIView(generics.RetrieveUpdateDestroyAPIView):queryset = Book.objects.all()
+serializer_class = BookSerializer
+permission_classes = [IsAuthenticatedOrReadOnly]
 
 class BookRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
