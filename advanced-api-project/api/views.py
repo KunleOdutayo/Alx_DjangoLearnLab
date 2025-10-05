@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, mixins
+from rest_framework import viewsets, generics, permissions, mixins
 from rest_framework.generics import GenericAPIView
-from .models import Book
-from .serializers import BookSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from .models import Author, Book
+from .serializers import AuthorSerializer, BookSerializer
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all().order_by('name')
@@ -30,7 +31,11 @@ class BookBaseView(GenericAPIView):
 
     permission_classes = [permissions.Is AuthenticatedOrReadOnly]
 
-class BookListView(mixins.ListModelMixin, BookBaseView):
+class BookListView(mixins.ListModelMixin, generics.GenericAPIView, BookBaseView):
+    queryset = Book.objects.all().order_by('title')
+    serializer_class = BookSerializer
+    permission_classes = [AllowAny]
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -38,19 +43,43 @@ class BookDetailView(mixins.RetrieveModelMixin, BookBaseView):
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
     
-class BookCreateView(mixins.CreateModelMixin, BookBaseView):
+class BookRetrieveView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class BookCreateView(mixins.CreateModelMixin, generics.GenericAPIView, BookBaseView):
+    queryset = Book.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
-class BookUpdateView(mixins.UpdateModelMixin, BookBaseView):
+class BookUpdateView(mixins.UpdateModelMixin, generics.GenericAPIView, BookBaseView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, reuest, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+    def patch(self, reuest, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
     
 class BookDeleteView(mixins.DestroyModelMixin, BookBaseView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        return self.destry(request, *args, **kwargs)
+    
+class BookDestryView(mixins.DestroyModelMixin, generics.GenericAPIView, BookBaseView):
+
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
         return self.destry(request, *args, **kwargs)
